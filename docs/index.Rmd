@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# lsBART for Continous Response Variable
+# lsBART for Continuous Response Variable
 
 
 
@@ -291,7 +291,7 @@ abline(v = (ts1[[2]]), lwd=1, col="green", lty=2)
 
 
 
-# lsBART for Binary response variable
+# lsBART for Binary Response Variable
 
 ### Load necessary libraries
 
@@ -568,7 +568,7 @@ abline(v = (ts1[[2]]), lwd=2, col="green", lty=2)
 
 
 
-## Implementing TreeShap for test set inference
+## Implementing TreeShap for Test Set Inference
 
 TreeShap is used to understand the contribution of each feature to the prediction of a single observation. Here, we apply the TreeShap algorithm to observation id: `r obs_id` from the test set to interpret why it was classified as `r y_test[obs_id]`.
 
