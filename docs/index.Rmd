@@ -1,0 +1,300 @@
+---
+Title: "lsBART Vignette"
+output:
+  html_document:
+    fig_caption: yes
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4 
+)
+```
+
+# lsBART for Continous response variable
+
+
+
+
+### Load necessary libraries
+
+```{r setup, echo = T, results = 'hide', message=FALSE}
+library(LocationSmoothedBART)
+library(fda)
+library(tidyverse)
+```
+
+
+## Generate Random Points
+
+In this section, we generate random functional data points to simulate our predictors. Each functional predictor is created by adding normally distributed noise to a base function. This process mimics the variability and noise present in real-world data, such as medical images.
+
+```{r, include = TRUE}
+
+#Generate a 1000 for each class
+set.seed(34)
+
+X_1 = rnorm(10, sd=1)
+X_2 = rnorm(10, sd=1)
+X_3 = rnorm(10, sd=1)
+X_4 = rnorm(10, sd=1)
+X_5 = rnorm(10, sd=1)
+
+
+c1_s_data = NULL
+c2_s_data = NULL
+c3_s_data = NULL
+c4_s_data = NULL
+c5_s_data = NULL
+
+for(i in 1:2000){
+  c1_s_data = cbind(c1_s_data, X_1 + rnorm(10,sd=0.5) )
+  c2_s_data = cbind(c2_s_data, X_2 + rnorm(10,sd=0.5) )
+  c3_s_data = cbind(c3_s_data, X_3 + rnorm(10,sd=0.5) )
+  c4_s_data = cbind(c4_s_data, X_4 + rnorm(10,sd=0.5) )
+  c5_s_data = cbind(c5_s_data, X_5 + rnorm(10,sd=0.5) )
+}
+sim_data_1 = cbind(c1_s_data, c2_s_data, c3_s_data, c4_s_data, c5_s_data)
+
+```
+
+## Simulated Fucntional Data
+
+Here, we convert the generated data into functional data objects using B-spline basis functions. This step is essential for transforming discrete data points into smooth functions that the lsBART model can process. The B-spline basis allows us to represent the data smoothly and flexibly.
+
+```{r, include = TRUE}
+bb = create.bspline.basis(rangeval = c(0,1), norder=8)
+
+############################################
+# CREATE THE POINTS
+
+d1 = Data2fd(c1_s_data, basis=bb)
+d1_points = t(d1$coefs)%*%t(eval.basis(seq(by =0.01,from=0,to=1), bb ))
+
+d2 = Data2fd(c2_s_data, basis=bb)
+d2_points = t(d2$coefs)%*%t(eval.basis(seq(by =0.01,from=0,to=1), bb ))
+
+d3 = Data2fd(c3_s_data, basis=bb)
+d3_points = t(d3$coefs)%*%t(eval.basis(seq(by =0.01,from=0,to=1), bb ))
+
+d4 = Data2fd(c4_s_data, basis=bb)
+d4_points = t(d4$coefs)%*%t(eval.basis(seq(by =0.01,from=0,to=1), bb ))
+
+d5 = Data2fd(c5_s_data, basis=bb)
+d5_points = t(d5$coefs)%*%t(eval.basis(seq(by =0.01,from=0,to=1), bb ))
+
+
+d1_points = d1_points+rnorm( dim(d1_points)[2], sd=0.05 )
+d2_points = d2_points+rnorm( dim(d2_points)[2], sd=0.05 )
+d3_points = d3_points+rnorm( dim(d3_points)[2], sd=0.05)
+d4_points = d4_points+rnorm( dim(d4_points)[2], sd=0.05 )
+d5_points = d5_points+rnorm( dim(d5_points)[2], sd=0.05)
+
+```
+
+## All generated 5 predictor functions plots
+
+Visualizing the functional predictors helps us understand the data structure. Here, we plot each of the five functional predictors to see their shapes and the added noise.
+
+### X_1 Functional Predictors
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide', fig.keep='all'}
+
+plot(d1)
+
+```
+
+### X_2 Functional Predictors
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide', fig.keep='all'}
+
+plot(d2)
+
+```
+
+### X_3 Functional Predictors
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide', fig.keep='all'}
+
+plot(d3)
+
+```
+
+### X_4 Functional Predictors
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide', fig.keep='all'}
+
+plot(d4)
+
+```
+
+### X_5 Functional Predictors
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide', fig.keep='all'}
+
+plot(d5)
+
+```
+
+# CREATE THE Y VARIABLE
+
+In this step, we define the true response variable using the functional predictors. The response is calculated based on specific intervals of the predictors, and Gaussian noise is added to simulate measurement error.
+
+## Friedman MARS paper sim data and the Time Points we want to infer
+
+Here we create the continuous y variable of interest. While we include code to use the modified Friedman function from the paper, in this example we only include the first two functional predictors using a partial Friedman function, the non-linear sine portion, to illustrate lsBART's ability to find the useful predictors and their important regions.
+
+```{r, include = T}
+t1 = 1:10
+t2 = 21:30
+t3 = 41:50
+t4 = 61:70
+t5 = 81:90
+
+friedmanFunc <- function(x){
+  
+  res = 10*sin(pi*x[1]*x[2]) + 20*(x[3]-0.5)^2 + 10*x[4] + 5*x[5]
+  return(res)
+}
+
+
+friedmanFunc2 <- function(points, ts){
+  
+  res = 10*rowSums(sin(pi* points[[1]][, ts[[1]]] * points[[2]][, ts[[2]] ]) ) +
+    20*rowSums((points[[3]][, ts[[3]]  ] -0.5)^2) +
+    10*rowSums((points[[4]][, ts[[4]]  ]))+
+    5*rowSums((points[[5]][, ts[[5]]  ]))
+  return(res)
+}
+
+partialfriedmanFunc3 <- function(points, ts){
+  
+  res = 10*rowSums(sin(pi* points[[1]][, ts[[1]]] ) )+
+    20*rowSums((points[[2]][, ts[[2]] ] -0.5)^2)
+  return(res)
+}
+
+num_intvls = dim(d1_points)[2]
+points1 = list(d1_points, d2_points)
+ts1 = list(t1,t2)
+
+#the truth
+true_y = partialfriedmanFunc3(points1, ts1)
+# Add Gaussian noise
+true_y = true_y + rnorm(length(true_y))
+
+
+num_predictors = 5
+points = cbind(d1_points,
+               d2_points,
+               d3_points,
+               d4_points,
+               d5_points)
+
+#create Train and Test sets
+df = data.frame(points)
+df = as_tibble(df)
+
+#use 50% of dataset as training set and 30% as test set
+set.seed(1)
+sample <- sample(c(TRUE, FALSE), nrow(df), replace=TRUE, prob=c(0.5,0.5))
+train  <- df[sample, ]
+test   <- df[!sample, ]
+
+y_train = true_y[sample]
+y_test = true_y[!sample]
+```
+
+## Training Data
+Here, we display the training data to verify the structure and the response variable. (Run code separately, if desired)
+
+```{r, include = F}
+train
+as_tibble(y_train)
+```
+
+
+## Test Data
+Here, we display the test data to verify the structure and the response variable. (Run code separately, if desired)
+
+```{r, include = FALSE}
+test
+as_tibble(y_test)
+```
+
+
+
+## w_lsBART
+
+The w_lsBART function fits the Bayesian additive regression trees model for continuous outcomes. Here we define the model as 'm0'. The model is trained on the training data and then used to predict the outcomes on the test data. 
+
+```{r,  include = TRUE}
+m0 = w_lsBART(num_predictors = num_predictors,
+              num_intvls =num_intvls,
+              x.train = as.matrix(train),
+              y.train = y_train,
+              x.test =  as.matrix(test),
+              sparse = TRUE,
+              ndpost = 100,
+              nskip = 100,
+              ntree = 200,
+              dart_fp = TRUE,
+              dart_int = TRUE)
+
+
+
+```
+
+## Model performance
+
+We evaluate the model's performance by calculating the Root Mean Squared Error (RMSE) of the predictions on the test set. We also plot the predicted vs. actual values to visualize the model's accuracy. We call 'yhat.test' and which returns a matrix of all predicted test values from each posterior sample. We use the colMeans() function to get a point estimate for each test observation.. 
+
+```{r, include = TRUE}
+
+     predictions <- colMeans(m0$yhat.test)
+     rmse <- sqrt(mean((y_test - predictions)^2))
+
+     # Plot predictions vs y_test
+      plot(y_test, predictions, main="Predictions vs Actual",
+        xlab="Actual y_test", ylab="Predictions", pch=19, col="blue")
+        abline(0, 1, col="red", lwd=2)
+
+```
+
+Here we see that the predictions follow a fairly straight line, with a Root Mean Squared Error value of `r round(rmse,2)`. 
+
+# See the functional Predictor Probabilities and Location Probabilities
+
+Now we examine the probabilities from the trained lsBART model to identify which functional predictors were important to the regression task. Clearly, we see that lsBART captures the important functional predictors, X_1 and X_2, while indicating that the other functional predictors (X_3, X_4, and X_5) are irrelevant to the regression task.
+
+```{r, include = TRUE}
+par(mfrow=c(1,1))
+barplot(colMeans(m0$varprob_fp),  main="Functional Predictor Probabilities",
+        space=0, names.arg  = paste0("X_", 1:num_predictors))
+
+```
+
+## See Location probabilities
+
+Now we highlight one of the best features of lsBART, the ability to interpret important functional predictors and regions of interest within them.
+
+```{r, include = TRUE}
+# Adjust plot margins and increase plot size
+par(mfrow=c(2,1), mar=c(4, 4, 2, 1))  
+
+# Plot for c1_s_data
+plot(Data2fd(c1_s_data, basis=bb))
+abline(v = (ts1[[1]]) / dim(d1_points)[2], lwd=1, col="green", lty=2)
+barplot(colMeans(m0$varprob_times[[1]]), main="X_1 Location Probability",
+        names.arg = as.character(1:num_intvls), space=0)
+abline(v = (ts1[[1]]), lwd=1, col="green", lty=2)
+
+# Plot for c2_s_data
+plot(Data2fd(c2_s_data, basis=bb))
+abline(v = (ts1[[2]]) / dim(d1_points)[2], lwd=1, col="green", lty=2)
+barplot(colMeans(m0$varprob_times[[2]]), main="X_2 Location Probability",
+        names.arg = as.character(round((1:num_intvls) / num_intvls, 2)), space=0)
+abline(v = (ts1[[2]]), lwd=1, col="green", lty=2)
+
