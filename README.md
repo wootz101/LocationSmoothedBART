@@ -21,6 +21,12 @@ devtools::install_github("wootz101/LocationSmoothedBART")
 
 Vignette for Continuous and Binary response variable is available at https://wootz101.github.io/LocationSmoothedBART/
 
+For details on functions, please call the help function with package name.
+
+``` r
+help("LocationSmoothedBART")
+```
+
 ## Contributing
 
 Contributions to the LocationSmoothedBART package are welcome. Please refer to our contributing guidelines for more information.
