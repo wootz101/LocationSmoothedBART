@@ -1,6 +1,6 @@
 Package: LocationSmoothedBART
 Type: Package
-Title: Location Smoothed Bayesian Additive Regression Trees for Medical Image Analysis
+Title: Location Smoothed Bayesian Additive Regression Trees
 Version: 1.0
 Date: 2023-04-04
 Author: Zachary Wooten

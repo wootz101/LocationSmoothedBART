@@ -21,7 +21,7 @@ devtools::install_github("wootz101/LocationSmoothedBART")
 
 For detailed documentation and vignettes on how to use LocationSmoothedBART, visit our [documentation page](https://[your-github-username].github.io/LocationSmoothedBART/).
 
-Vignette is available at 
+Vignette for Continuous and Binary response variable is available at https://wootz101.github.io/LocationSmoothedBART/
 
 ## Contributing
 
