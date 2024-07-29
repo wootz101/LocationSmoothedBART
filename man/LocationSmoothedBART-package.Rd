@@ -121,6 +121,86 @@
   }
   }
 
+  \subsection{splitTrees}{
+  Splits the tree string into individual trees for further processing.
+
+  \emph{Input Arguments:}
+  \describe{
+    \item{\code{s}}{A string containing all trees from the BART model.}
+    \item{\code{num_trees}}{An integer representing the number of trees.}
+  }
+
+  \emph{Outputs:}
+  \describe{
+    \item{\code{tree_vector}}{A vector of strings, each representing a single tree.}
+  }
+  }
+
+  \subsection{getBARTTree}{
+  Extracts the structure of a specific tree from the BART model.
+
+  \emph{Input Arguments:}
+  \describe{
+    \item{\code{bartModel}}{A BART model object containing tree draws and cut points.}
+    \item{\code{k}}{An integer representing the tree number to extract (default is 1).}
+    \item{\code{labelVar}}{A logical flag indicating whether to label split variables (default is FALSE).}
+    \item{\code{ntree}}{An integer representing the total number of trees.}
+  }
+
+  \emph{Outputs:}
+  \describe{
+    \item{\code{tree_df}}{A data frame representing the structure of the specified tree.}
+  }
+  }
+
+  \subsection{renameSplitVar}{
+  Renames the split variables in the tree data frame based on the dataset column names.
+
+  \emph{Input Arguments:}
+  \describe{
+    \item{\code{tree_df}}{A data frame containing the tree structure with split variables.}
+    \item{\code{dataset}}{A data frame containing the dataset used to train the model.}
+  }
+
+  \emph{Outputs:}
+  \describe{
+    \item{\code{tree_df}}{A data frame with split variable IDs replaced by their respective column names.}
+  }
+  }
+
+  \subsection{BART.unify}{
+  Unifies the BART model into a format suitable for treeshap calculations.
+
+  \emph{Input Arguments:}
+  \describe{
+    \item{\code{rf_model}}{A BART model object.}
+    \item{\code{data}}{A data frame containing the dataset.}
+    \item{\code{numtree}}{An integer representing the number of trees.}
+    \item{\code{ndpost}}{An integer representing the number of posterior draws.}
+    \item{\code{ndpost_draw}}{An integer representing the specific posterior draw to unify.}
+  }
+
+  \emph{Outputs:}
+  \describe{
+    \item{\code{ret}}{A list containing a unified model and data, formatted for use with the TreeShap package.}
+  }
+  }
+
+  \subsection{getBARTprediction}{
+  Traverses the BART tree and returns the prediction for a given observation.
+
+  \emph{Input Arguments:}
+  \describe{
+    \item{\code{tree_df}}{A data frame representing the structure of a tree.}
+    \item{\code{observation}}{A named vector or data frame row containing the observation to predict.}
+  }
+
+  \emph{Outputs:}
+  \describe{
+    \item{\code{prediction}}{A numeric value representing the predicted response for the given observation.}
+  }
+  }
+
 
   For detailed examples and tutorials, please refer to the vignettes and the documentation available on the package's GitHub page.
 }
