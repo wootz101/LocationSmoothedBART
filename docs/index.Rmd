@@ -295,6 +295,7 @@ abline(v = (ts1[[2]]), lwd=1, col="green", lty=2)
 
 ### Load necessary libraries
 
+Must have TreeShap_Source file loaded to run TreeShap algorithm on BART model. The file is found in the /docs folder.
 ```{r readsim, , cache=TRUE}
 source("TreeShap_Source.R", local = knitr::knit_global())
 
@@ -410,7 +411,7 @@ plot(d4)
 
 In this step, we define the true response variable using the functional predictors. The response is calculated based on specific intervals of the predictors, and Gaussian noise is added to simulate measurement error. We then convert the continuous response variable into a binary variable based on whether it is above or below the mean.
 
-```{r, include = FALSE}
+```{r, include = TRUE}
 t1 = 21:30
 t2 = 41:50
 
@@ -445,7 +446,6 @@ mean_y = mean(true_y)
 true_y = true_y + rnorm(length(true_y))
 
 # Change Y to binary variable, 1 if value is above the mean, 0 if not
-
 bin_y = as.numeric(true_y > mean_y)
 
 
@@ -476,7 +476,7 @@ y_test = bin_y[!sample]
 
 The p_lsBART function fits the Bayesian additive regression trees model for binary outcomes. The model here is defined as 'm0'. The model parameters such as the number of trees (ntree) and the number of posterior samples (ndpost) are set. The model is trained on the training data and then used to predict the outcomes on the test data.
 
-```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE, results='hide'}
+```{r,  echo=TRUE, warning=FALSE, message=FALSE, error=FALSE, results='hide'}
 set.seed(1)
 
 ntree = 50
