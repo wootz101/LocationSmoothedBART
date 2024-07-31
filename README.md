@@ -21,16 +21,23 @@ devtools::install_github("wootz101/LocationSmoothedBART")
 
 Vignette for Continuous and Binary response variable is available at https://wootz101.github.io/LocationSmoothedBART/
 
+For details on functions, please call the help function with package name.
+
+``` r
+help("LocationSmoothedBART")
+```
+
 ## Contributing
 
 Contributions to the LocationSmoothedBART package are welcome. Please refer to our contributing guidelines for more information.
 
-## Citation
+## Citations
 
 If you use LocationSmoothedBART in your research, please cite:
 
 Wooten, Z. et al. (2024). "Location smoothed BART: A method for interpretable and robust quality assurance of organ contours in radiotherapy treatment planning" (Under Review)
 
+### Other References
 This work is built on the BART R package by Sparapani, Spanbauer, and McCulloch. For additional background information and related methodologies, refer to the BART R package documentation and associated research papers.
 
   Sparapani R, Spanbauer C, McCulloch R (2021). “Nonparametric Machine Learning and Efficient Computation with Bayesian
