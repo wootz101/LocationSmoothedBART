@@ -27,9 +27,11 @@ For details on functions, please call the help function with package name.
 help("LocationSmoothedBART")
 ```
 
+To run the TreeShap algorithm on the lsBART model, be sure to load and source the TreeShap_Source.R file located in the /docs folder.
+
 ## Contributing
 
-Contributions to the LocationSmoothedBART package are welcome. Please refer to our contributing guidelines for more information.
+Contributions to the LocationSmoothedBART package are welcome.
 
 ## Citations
 
@@ -48,6 +50,10 @@ For the implementing the TreeShap algorithm within the BART framework we built o
 
   Komisarczyk K, Kozminski P, Maksymiuk S, Biecek P (2023). _treeshap: Fast SHAP values computation for tree ensemble
   models_. R package version 0.1.1.9001, <https://github.com/ModelOriented/treeshap>.
+
+## Code Reproducibility
+
+To reporduce analysis and plots from the Location Smoothed BART paper, please check the /plots folder. There are scripts to run the simulation and generate the plots presented in the paper. There are also scripts to generate plots and reporduce the analysis of both labeled and unlabeled kidney contour quality assurance.
 
 
 ## Contact
