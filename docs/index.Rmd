@@ -65,7 +65,7 @@ sim_data_1 = cbind(c1_s_data, c2_s_data, c3_s_data, c4_s_data, c5_s_data)
 
 ```
 
-## Simulated Fucntional Data
+## Simulated Functional Data
 
 Here, we convert the generated data into functional data objects using B-spline basis functions. This step is essential for transforming discrete data points into smooth functions that the lsBART model can process. The B-spline basis allows us to represent the data smoothly and flexibly.
 
@@ -668,7 +668,7 @@ var_names2 = c("X_1", "X_2", "X_3", "X_4")
 obs1 = data.frame(test)[obs_id, ]
 unif_list2 = NULL
 
-#Qick estimate
+#Quick estimate
 for (i in seq(5, ndpost, by = ndpost / 5)) {
   bart_unify = BART.unify(m0, data.frame(df), ntree, ndpost, i)
   treeshap1 <-
@@ -726,7 +726,7 @@ df_shapely_total
 
 
 
-### Shapely plot for Functional Predictor importance
+### Shapley plot for Functional Predictor importance
 
 The following bar plot shows the average Shapley values for each functional predictor. This visualization helps identify which predictor functions had the largest influence on the prediction of the selected observation.
 
@@ -758,12 +758,12 @@ ggplot(df_shapely_total, aes(x = name, y = shapely, fill = shapely > 0)) +
 
 ```
 
-Here we see which predictor function had the largets influence on the prediction of observation 1. It turns out to be X_2. From this we infer that X_2 was the most important predictor function for the observation 1.
+Here we see which predictor function had the largest influence on the prediction of observation 1. It turns out to be X_2. From this we infer that X_2 was the most important predictor function for the observation 1.
 
 
-### Shapely plot for location importance of X_2
+### Shapley plot for location importance of X_2
 
-Finally, we examine the Shapley values of observation 1's X_2 predictor function to identify the specific regions within X_2 that were most influential in the classification.
+Finally, we examine the Shapely values of observation 1's X_2 predictor function to identify the specific regions within X_2 that were most influential in the classification.
 
 ```{r}
 
