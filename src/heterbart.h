@@ -24,7 +24,7 @@
 #include "heterbd.h"
 
 #include <iostream>
-#include <Eigen/Dense>
+
 #include <random>
 #include <cmath>
 
