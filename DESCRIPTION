@@ -8,7 +8,7 @@ Maintainer: Zachary Wooten <ztw5@rice.edu>
 Description: LocationSmoothedBART (lsBART) is an advanced R package that extends the Bayesian Additive Regression Trees (BART) model for scalar-on-function regression. It is specifically designed for medical image analysis in radiation treatment planning, focusing on identifying significant regions within predictor functions to ensure accurate and reliable contour delineation. The package incorporates multi-level sparsity and spatial smoothing techniques and integrates Shapley values for detailed inference on binary response variables.
 License: GPL (>= 2)
 Imports: 
-    Rcpp (>= 1.0.5)
+    Rcpp (>= 1.0.10)
 LinkingTo: 
     Rcpp
 Suggests: 
