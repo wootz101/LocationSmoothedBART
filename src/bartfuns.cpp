@@ -410,29 +410,6 @@ void draw_theta0(bool const_theta, double& theta, std::vector<double>& lpv,
 ////////////////////////////////////////////////////////////////////
 
 
-// Squared Exponential Covariance Function
-Eigen::MatrixXd covSE(const Eigen::VectorXd& x, double ell, double alpha, double sigma_jitter) {
-  Eigen::MatrixXd M = ((-0.5 / (ell * ell)) * (x.replicate(1, x.size()) - x.transpose().replicate(x.size(), 1)).array().square()).exp();
-  M = alpha * M;
-  M.diagonal().array() += sigma_jitter; // Adding jitter for numerical stability
-  return M;
-}
-
-// Sampling from Multivariate Normal using Eigenvalues Decomposition
-Eigen::VectorXd sampleMultivariateNormal(const Eigen::VectorXd& mean, const Eigen::MatrixXd& covar) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::normal_distribution<> d(0, 1);
-
-  SelfAdjointEigenSolver<Eigen::MatrixXd> eigenSolver(covar);
-  Eigen::VectorXd z(mean.size());
-  for (int i = 0; i < mean.size(); ++i) {
-    z[i] = d(gen);
-  }
-  return mean + eigenSolver.eigenvectors() * eigenSolver.eigenvalues().cwiseSqrt().asDiagonal() * z;
-}
-
-
 
 
 

@@ -82,10 +82,10 @@ void draw_theta0(bool const_theta, double& theta, std::vector<double>& lpv,
 //For GP prior process
 
 // Squared Exponential Covariance Function
-Eigen::MatrixXd covSE(const Eigen::VectorXd& x, double ell, double alpha, double sigma_jitter) ;
+//Eigen::MatrixXd covSE(const Eigen::VectorXd& x, double ell, double alpha, double sigma_jitter) ;
 
 // Sampling from Multivariate Normal using Eigenvalues Decomposition
-Eigen::VectorXd sampleMultivariateNormal(const Eigen::VectorXd& mean, const Eigen::MatrixXd& covar ) ;
+//Eigen::VectorXd sampleMultivariateNormal(const Eigen::VectorXd& mean, const Eigen::MatrixXd& covar ) ;
 
 
 

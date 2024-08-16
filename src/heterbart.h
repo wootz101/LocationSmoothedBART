@@ -41,8 +41,8 @@ public:
    void draw_conditional_neighborhood(size_t funcP, size_t intvls, double *sigma,
                          rn& gen, rn& gen_fp, rn& gen_int, double sigma_int);
 
-   void draw_GP(size_t funcP, size_t intvls, double *sigma,
-                                      rn& gen, rn& gen_fp, rn& gen_int, double sigma_int);
+  // void draw_GP(size_t funcP, size_t intvls, double *sigma,
+    //                                  rn& gen, rn& gen_fp, rn& gen_int, double sigma_int);
 };
 
 #endif

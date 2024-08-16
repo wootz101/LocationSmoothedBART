@@ -232,7 +232,7 @@ void bart::draw_global_conditional(size_t funcP, size_t intvls, double sigma,
     //DART for FunctionalPredictors FP
     //if(dartOn_fp){
     for(size_t j=0;j<funcP;j++){
-      int temp_funcP = {0};
+      int temp_funcP{0};
       for(size_t k=0; k<intvls; k++){
         temp_funcP += nv[(j)*intvls+k];
         //temp_funcP += nv[(j)*intvls+k];
@@ -307,7 +307,7 @@ void bart::draw_global(size_t funcP, size_t intvls, double sigma,
     //DART for FunctionalPredictors FP
     //if(dartOn_fp){
     for(size_t j=0;j<funcP;j++){
-      int temp_funcP = {0};
+      int temp_funcP{0};
       for(size_t k=0; k<intvls; k++){
         printf(" FP  %zu", nv[(j)*intvls+k], "  --" );
         temp_funcP += nv[(j)*intvls+k];
@@ -451,7 +451,7 @@ void bart::draw_global_neighborhood(size_t funcP, size_t intvls, double sigma,
     //DART for FunctionalPredictors FP
     //if(dartOn_fp){
     for(size_t j=0;j<funcP;j++){
-      int temp_funcP = {0};
+      int temp_funcP{0};
       for(size_t k=0; k<intvls; k++){
         temp_funcP += nv[(j)*intvls+k];
         //temp_funcP += nv[(j)*intvls+k];
@@ -482,9 +482,9 @@ void bart::draw_global_neighborhood(size_t funcP, size_t intvls, double sigma,
 
 
       //get neighborhood matrix
-      std::vector<std::vector<double> > temp_mat(intvls, std::vector<double>(intvls));
+      std::vector<std::vector<double>> temp_mat(intvls, std::vector<double>(intvls));
       for(size_t j=0;j<intvls;j++){
-        int temp_diff = {0};
+        int temp_diff{0};
         for(size_t l=0;l<intvls;l++){
           //temp_mat[j][k] = ::exp(lpv_intvls[j])*::exp( ( (-(k-j)^2 )/2 ) );
           temp_diff = l-j;
@@ -496,7 +496,7 @@ void bart::draw_global_neighborhood(size_t funcP, size_t intvls, double sigma,
         }
       }
 
-      double temp_sum = {0};
+      double temp_sum{0};
       for(size_t j=0;j<intvls;j++){
         nv_intvls_cond[(j)+k*intvls] = nv_intvls[j];
         //pv_intvls_cond[(j)+k*intvls] = ::exp(lpv_intvls[j]);
