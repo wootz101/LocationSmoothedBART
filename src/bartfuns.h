@@ -25,7 +25,7 @@
 #include "info.h"
 #include <algorithm>
 
-#include <RcppEigen.h>
+
 
 
 #include <iostream>
@@ -33,7 +33,7 @@
 #include <random>
 #include <cmath>
 
-using namespace Eigen;
+
 using namespace std;
 
 //--------------------------------------------------

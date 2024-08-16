@@ -1,6 +1,7 @@
 ---
 title: "Vignette: lsBART for continous response variable"
-output: rmarkdown::html_vignette
+#output: rmarkdown::html_vignette
+output: html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette: lsBART for continous response variable}
   %\VignetteEngine{knitr::rmarkdown}
